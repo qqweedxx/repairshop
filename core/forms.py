@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import User
+from .models import User, Order
 
 
 class RegisterForm(UserCreationForm):
@@ -16,7 +16,6 @@ class RegisterForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Добавляем Bootstrap-классы ко всем полям
         for field_name, field in self.fields.items():
             css = 'form-check-input' if isinstance(field.widget, forms.CheckboxInput) else 'form-control'
             field.widget.attrs['class'] = css
@@ -36,3 +35,40 @@ class LoginForm(forms.Form):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
+
+
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ('service', 'device_type', 'description', 'photo')
+        labels = {
+            'service': 'Услуга (если знаете)',
+            'device_type': 'Тип устройства',
+            'description': 'Описание неисправности',
+            'photo': 'Фото (необязательно)',
+        }
+        widgets = {
+            'service': forms.Select(attrs={'class': 'form-select'}),
+            'device_type': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Например: iPhone 11, ноутбук Lenovo',
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 4,
+                'placeholder': 'Опишите, что случилось с устройством',
+            }),
+            'photo': forms.FileInput(attrs={'class': 'form-control'}),
+        }
+
+    def clean_device_type(self):
+        device_type = self.cleaned_data['device_type'].strip()
+        if len(device_type) < 3:
+            raise forms.ValidationError('Укажите тип устройства (минимум 3 символа).')
+        return device_type
+
+    def clean_description(self):
+        description = self.cleaned_data['description'].strip()
+        if len(description) < 10:
+            raise forms.ValidationError('Опишите неисправность подробнее (минимум 10 символов).')
+        return description            
