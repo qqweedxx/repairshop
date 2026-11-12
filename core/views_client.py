@@ -19,3 +19,8 @@ def order_create(request):
         form = OrderForm()
 
     return render(request, 'order_create.html', {'form': form})
+
+@role_required('client')
+def client_dashboard(request):
+    orders = request.user.client_orders.all()
+    return render(request, 'client_dashboard.html', {'orders': orders})    
