@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import User, Order
+from .models import User, Order, Comment, OrderStatusHistory
 
 
 class RegisterForm(UserCreationForm):
@@ -71,4 +71,25 @@ class OrderForm(forms.ModelForm):
         description = self.cleaned_data['description'].strip()
         if len(description) < 10:
             raise forms.ValidationError('Опишите неисправность подробнее (минимум 10 символов).')
-        return description            
+        return description      
+
+class StatusChangeForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ('status',)
+        labels = {'status': 'Новый статус'}
+        widgets = {'status': forms.Select(attrs={'class': 'form-select'})}
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('text',)
+        labels = {'text': 'Комментарий'}
+        widgets = {
+            'text': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Напишите комментарий к заявке',
+            })
+        }              
