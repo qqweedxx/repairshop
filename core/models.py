@@ -63,7 +63,7 @@ class Order(models.Model):
     max_length=200, 
     validators=[MinLengthValidator(3)], 
     verbose_name='Тип устройства'
-)
+    )
     description = models.TextField(verbose_name='Описание неисправности')
     photo = models.ImageField(upload_to='orders/', blank=True, null=True, verbose_name='Фото')
     status = models.CharField(

@@ -1,10 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import Order, OrderStatusHistory, Comment
-from .forms import StatusChangeForm, CommentForm
-from .decorators import role_required
-from .forms import StatusChangeForm, CommentForm, OrderPartForm, OrderCostForm
 from .models import Order, OrderStatusHistory, Comment, OrderPart, Part
+from .forms import StatusChangeForm, CommentForm, OrderPartForm, OrderCostForm
+from .decorators import role_required
 
 
 @role_required('master', 'admin')
@@ -82,16 +80,16 @@ def order_add_part(request, order_id):
         if form.is_valid():
             order_part = form.save(commit=False)
             order_part.order = order
-            order_part.save()
             
-            # Уменьшаем остаток на складе
+            # Сначала проверяем, хватает ли деталей на складе
             part = order_part.part
             if part.quantity_in_stock >= order_part.quantity_used:
                 part.quantity_in_stock -= order_part.quantity_used
                 part.save()
-                messages.success(request, f'Запчасть «{part.name}» добавлена.')
+                order_part.save() # Сохраняем только если на складе хватило
+                messages.success(request, f'Запчасть «{part.name}» добавлена, остаток на складе: {part.quantity_in_stock}.')
             else:
-                messages.warning(request, f'Запчасть «{part.name}» добавлена, но на складе осталось мало деталей (остаток: {part.quantity_in_stock}).')
+                messages.error(request, f'Ошибка! На складе только {part.quantity_in_stock} шт. запчасти «{part.name}».')
             return redirect('master_dashboard')
     else:
         form = OrderPartForm()
