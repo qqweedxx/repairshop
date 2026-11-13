@@ -3,6 +3,8 @@ from django.contrib import messages
 from .models import Order, OrderStatusHistory, Comment
 from .forms import StatusChangeForm, CommentForm
 from .decorators import role_required
+from .forms import StatusChangeForm, CommentForm, OrderPartForm, OrderCostForm
+from .models import Order, OrderStatusHistory, Comment, OrderPart, Part
 
 
 @role_required('master', 'admin')
@@ -67,3 +69,50 @@ def order_add_comment(request, order_id):
         'form': CommentForm(),
         'order': order,
     })
+
+@role_required('master', 'admin')
+def order_add_part(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    if request.user.role == 'master' and order.master != request.user:
+        messages.error(request, 'Это не ваша заявка.')
+        return redirect('master_dashboard')
+
+    if request.method == 'POST':
+        form = OrderPartForm(request.POST)
+        if form.is_valid():
+            order_part = form.save(commit=False)
+            order_part.order = order
+            order_part.save()
+            
+            # Уменьшаем остаток на складе
+            part = order_part.part
+            if part.quantity_in_stock >= order_part.quantity_used:
+                part.quantity_in_stock -= order_part.quantity_used
+                part.save()
+                messages.success(request, f'Запчасть «{part.name}» добавлена.')
+            else:
+                messages.warning(request, f'Запчасть «{part.name}» добавлена, но на складе осталось мало деталей (остаток: {part.quantity_in_stock}).')
+            return redirect('master_dashboard')
+    else:
+        form = OrderPartForm()
+
+    return render(request, 'order_add_part.html', {'form': form, 'order': order})
+
+
+@role_required('master', 'admin')
+def order_update_cost(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    if request.user.role == 'master' and order.master != request.user:
+        messages.error(request, 'Это не ваша заявка.')
+        return redirect('master_dashboard')
+
+    if request.method == 'POST':
+        form = OrderCostForm(request.POST, instance=order)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Стоимость работ обновлена.')
+            return redirect('master_dashboard')
+    else:
+        form = OrderCostForm(instance=order)
+
+    return render(request, 'order_update_cost.html', {'form': form, 'order': order})

@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import User, Order, Comment, OrderStatusHistory
+from .models import User, Order, Comment, OrderStatusHistory, OrderPart, Part
 
 
 class RegisterForm(UserCreationForm):
@@ -93,3 +93,22 @@ class CommentForm(forms.ModelForm):
                 'placeholder': 'Напишите комментарий к заявке',
             })
         }              
+
+class OrderPartForm(forms.ModelForm):
+    class Meta:
+        model = OrderPart
+        fields = ('part', 'quantity_used')
+        labels = {'part': 'Запчасть', 'quantity_used': 'Количество'}
+        widgets = {
+            'part': forms.Select(attrs={'class': 'form-select'}),
+            'quantity_used': forms.NumberInput(attrs={'class': 'form-control', 'min': 1}),
+        }
+
+class OrderCostForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ('total_cost',)
+        labels = {'total_cost': 'Стоимость работ (руб.)'}
+        widgets = {
+            'total_cost': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'min': 0}),
+        }
