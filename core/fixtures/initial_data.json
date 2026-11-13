@@ -1,0 +1,47 @@
+[
+  {
+    "model": "core.service",
+    "pk": 1,
+    "fields": {
+      "name": "Замена экрана",
+      "description": "Замена дисплейного модуля на оригинальный или аналог.",
+      "price": "5000.00"
+    }
+  },
+  {
+    "model": "core.service",
+    "pk": 2,
+    "fields": {
+      "name": "Чистка от пыли",
+      "description": "Профилактическая чистка ноутбука/ПК от пыли с заменой термопасты.",
+      "price": "1500.00"
+    }
+  },
+  {
+    "model": "core.service",
+    "pk": 3,
+    "fields": {
+      "name": "Замена аккумулятора",
+      "description": "Замена изношенной батареи на новую.",
+      "price": "2500.00"
+    }
+  },
+  {
+    "model": "core.service",
+    "pk": 4,
+    "fields": {
+      "name": "Диагностика",
+      "description": "Бесплатная диагностика при последующем ремонте.",
+      "price": "0.00"
+    }
+  },
+  {
+    "model": "core.part",
+    "pk": 1,
+    "fields": {
+      "name": "Экран iPhone 11",
+      "quantity_in_stock": 5,
+      "price": "8000.00"
+    }
+  }
+]
