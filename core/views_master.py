@@ -28,12 +28,22 @@ def order_update_status(request, order_id):
         return redirect('master_dashboard')
 
     if request.method == 'POST':
-        old_status = order.status  # <--- ЗАПОМИНАЕМ СТАРЫЙ СТАТУС ЗДЕСЬ!
+        old_status = order.status
         form = StatusChangeForm(request.POST, instance=order)
         
         if form.is_valid():
-            updated_order = form.save()
+            # Сохраняем статус, но пока не применяем к базе
+            updated_order = form.save(commit=False)
+            
+            # 1. Сохраняем стоимость
+            total_cost = request.POST.get('total_cost')
+            if total_cost:
+                updated_order.total_cost = total_cost
+                
+            # Применяем изменения в базу
+            updated_order.save()
 
+            # 2. Записываем историю статуса (если он изменился)
             if old_status != updated_order.status:
                 OrderStatusHistory.objects.create(
                     order=updated_order,
@@ -41,6 +51,17 @@ def order_update_status(request, order_id):
                     changed_by=request.user
                 )
                 messages.success(request, f'Статус изменён на «{updated_order.get_status_display()}».')
+
+            # 3. Сохраняем комментарий (если он введен)
+            comment_text = request.POST.get('comment', '').strip()
+            if comment_text:
+                Comment.objects.create(
+                    order=updated_order,
+                    author=request.user,
+                    text=comment_text
+                )
+                messages.success(request, 'Комментарий добавлен.')
+                
             return redirect('master_dashboard')
     else:
         form = StatusChangeForm(instance=order)
