@@ -1,37 +1,61 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Вход — Ремонтная мастерская{% endblock %}
+{% block title %}Вход — Ремонтная мастерская СЕВЕР{% endblock %}
 
 {% block content %}
 <div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-12 col-md-6 col-lg-4">
-            <div class="card shadow-sm">
-                <div class="card-body p-4">
-                    <h2 class="card-title text-center mb-4">Вход</h2>
+    <div class="row pt-4">
+        <div class="col-12 col-md-8 col-lg-6">
+            
+            <h2 class="fw-bold mb-4" style="font-size: 32px;">Вход</h2>
 
-                    <form method="post" novalidate>
-                        {% csrf_token %}
-                            <input type="hidden" name="next" value="{{ request.GET.next }}">
+            <form method="post" novalidate>
+                {% csrf_token %}
 
-                        {% for field in form %}
-                            <div class="mb-3">
-                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-                                {{ field }}
-                                {% if field.errors %}
-                                    <div class="text-danger small mt-1">{{ field.errors }}</div>
-                                {% endif %}
-                            </div>
-                        {% endfor %}
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger py-2" style="font-size: 14px;">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
 
-                        <button type="submit" class="btn btn-primary w-100">Войти</button>
-                    </form>
-
-                    <p class="text-center text-muted mt-3 mb-0">
-                        Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a>
-                    </p>
+                <!-- Поле: Имя пользователя -->
+                <div class="mb-4">
+                    <label for="{{ form.username.id_for_label }}" class="form-label fw-medium mb-2" style="font-size: 15px;">Имя</label>
+                    <input type="text" name="{{ form.username.name }}" id="{{ form.username.id_for_label }}" 
+                           class="form-control" placeholder="Введите имя..." required>
+                    
+                    {% if not form.username.errors %}
+                        <div class="form-text text-muted" style="font-size: 12px;">Обязательное поле</div>
+                    {% endif %}
+                    {% if form.username.errors %}
+                        <div class="text-danger small mt-1">{{ form.username.errors }}</div>
+                    {% endif %}
                 </div>
-            </div>
+
+                <!-- Поле: Пароль -->
+                <div class="mb-4">
+                    <label for="{{ form.password.id_for_label }}" class="form-label fw-medium mb-2" style="font-size: 15px;">Пароль</label>
+                    <input type="password" name="{{ form.password.name }}" id="{{ form.password.id_for_label }}" 
+                           class="form-control" placeholder="Введите пароль..." required>
+                    
+                    {% if not form.password.errors %}
+                        <div class="form-text text-muted" style="font-size: 12px;">Обязательное поле</div>
+                    {% endif %}
+                    {% if form.password.errors %}
+                        <div class="text-danger small mt-1">{{ form.password.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mt-5 mb-4">
+                    <button type="submit" class="btn btn-primary px-4 py-2" style="font-size: 16px; min-width: 120px;">Войти</button>
+                </div>
+
+                <p style="font-size: 15px;">
+                    Нет аккаунта? <a href="{% url 'register' %}" class="text-dark fw-medium text-decoration-underline">Зарегистрируйтесь</a>
+                </p>
+
+            </form>
         </div>
     </div>
 </div>

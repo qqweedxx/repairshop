@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Создание заявки — Ремонтная мастерская СЕВЕР{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row pt-4">
+        <div class="col-12 col-md-8 col-lg-6">
+            
+            <h2 class="fw-bold mb-4 pb-2" style="font-size: 32px;">Создание заявки</h2>
+
+            <form method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger py-2" style="font-size: 14px;">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <!-- Поле 1: Услуга -->
+                <div class="mb-4">
+                    <label for="{{ form.service.id_for_label }}" class="form-label fw-medium mb-2" style="font-size: 15px;">Тип услуги</label>
+                    {{ form.service }}
+                    {% if form.service.errors %}
+                        <div class="text-danger small mt-1">{{ form.service.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Поле 2: Тип устройства -->
+                <div class="mb-4">
+                    <label for="{{ form.device_type.id_for_label }}" class="form-label fw-medium mb-2" style="font-size: 15px;">Тип устройства</label>
+                    {{ form.device_type }}
+                    
+                    <!-- Показываем серую подсказку, ТОЛЬКО если нет ошибки -->
+                    {% if not form.device_type.errors %}
+                        <div class="form-text text-muted" style="font-size: 12px;">Обязательное поле</div>
+                    {% endif %}
+                    
+                    <!-- Показываем красную ошибку, если она есть -->
+                    {% if form.device_type.errors %}
+                        <div class="text-danger small mt-1">{{ form.device_type.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Поле 3: Описание неисправности -->
+                <div class="mb-4">
+                    <label for="{{ form.description.id_for_label }}" class="form-label fw-medium mb-2" style="font-size: 15px;">Описание неисправности</label>
+                    {{ form.description }}
+                    
+                    {% if not form.description.errors %}
+                        <div class="form-text text-muted" style="font-size: 12px;">Обязательное поле</div>
+                    {% endif %}
+                    
+                    {% if form.description.errors %}
+                        <div class="text-danger small mt-1">{{ form.description.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Поле 4: Фото -->
+                <div class="mb-4 mt-5">
+                    <label class="form-label fw-medium mb-2" style="font-size: 15px;">Фото (по желанию)</label>
+                    <!-- Скрываем стандартный инпут -->
+                    <input type="file" name="{{ form.photo.name }}" id="{{ form.photo.id_for_label }}" 
+                           class="d-none" accept="image/*" onchange="document.getElementById('file-name').innerText = this.files[0].name">
+                    
+                    <!-- Красивая кликабельная рамка -->
+                    <label for="{{ form.photo.id_for_label }}" 
+                           class="w-100 d-flex flex-column align-items-center justify-content-center p-4 rounded-3" 
+                           style="border: 1.5px dashed #6c757d; cursor: pointer; min-height: 160px; transition: 0.2s;"
+                           onmouseover="this.style.backgroundColor='#f8f9fa'" 
+                           onmouseout="this.style.backgroundColor='transparent'">
+                        
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-image fs-4 text-secondary"></i>
+                            <span class="text-secondary" style="font-size: 16px;">Нажмите, чтобы загрузить фото</span>
+                        </div>
+                    </label>
+                    
+                    <div id="file-name" class="small text-muted mt-2 text-center"></div>
+                    
+                    {% if form.photo.errors %}
+                        <div class="text-danger small mt-1">{{ form.photo.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Кнопка -->
+                <div class="mt-5 mb-4">
+                    <button type="submit" class="btn btn-primary w-100 py-2" style="font-size: 16px;">Отправить</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

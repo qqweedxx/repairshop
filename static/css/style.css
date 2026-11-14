@@ -1,3 +1,38 @@
+/* Подключаем шрифт Inter */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+
 body {
-    background-color: #f8f9fa;
+    font-family: 'Inter', sans-serif;
+    background-color: #f8f9fa; /* Светло-серый фон как в Bootstrap */
+}
+
+:root {
+    --color-primary: #0d6efd; /* Ярко-синий для кнопок */
+    --color-dark: #0648a7;    /* Тёмно-синий для шапки, футера и блока 10+ */
+}
+
+/* ТЁМНО-СИНИЙ ЦВЕТ ДЛЯ ФОНА (Шапка, футер, блок 10+) */
+.bg-primary {
+    background-color: var(--color-dark) !important; 
+}
+
+/* ЯРКО-СИНИЙ ЦВЕТ ДЛЯ КНОПОК */
+.btn-primary {
+    background-color: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
+    font-weight: 500;
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7 !important;
+    border-color: #0b5ed7 !important;
+}
+
+.text-primary {
+    color: var(--color-primary) !important;
+}
+
+/* Высота шапки 130px */
+.navbar-custom {
+    height: 130px;
 }
