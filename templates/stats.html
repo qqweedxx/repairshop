@@ -13,7 +13,6 @@
                 <a href="{% url 'admin_dashboard' %}" class="btn btn-outline-secondary px-4 py-2 fw-medium">← Назад к заявкам</a>
             </div>
 
-            <!-- Блок сводки (Темная карточка) -->
             <div class="row mb-5">
                 <div class="col-12 col-md-6 col-lg-4">
                     <div class="card border-0" style="background-color: #6c757d; color: white; border-radius: 6px;">
@@ -30,30 +29,24 @@
                                 <span class="text-white-50">Выручка</span>
                                 <span class="fw-bold">{{ total_revenue }} ₽</span>
                             </div>
-                            <!-- Пока кнопка ведет никуда, можно сделать ссылку на список заявок -->
                             <a href="{% url 'admin_dashboard' %}" class="btn btn-outline-light w-100 py-1" style="font-size: 14px;">Подробнее</a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Блок с графиками -->
             <div class="row g-4">
                 
-                <!-- График 1: Заявки по дням -->
                 <div class="col-12 col-md-6">
                     <h4 class="fw-bold mb-3" style="font-size: 24px;">График заявок</h4>
                     <div class="card border-0 shadow-sm p-3" style="background-color: #f8f9fa;">
-                        <!-- Сюда Chart.js вставит свой график -->
                         <canvas id="ordersChart" style="max-height: 300px;"></canvas>
                     </div>
                 </div>
 
-                <!-- График 2: Популярные услуги -->
                 <div class="col-12 col-md-6">
                     <h4 class="fw-bold mb-3" style="font-size: 24px;">Популярные услуги</h4>
                     <div class="card border-0 shadow-sm p-3" style="background-color: #f8f9fa;">
-                        <!-- Сюда Chart.js вставит свой график -->
                         <canvas id="servicesChart" style="max-height: 300px;"></canvas>
                     </div>
                 </div>
@@ -64,15 +57,12 @@
     </div>
 </div>
 
-<!-- Подключаем библиотеку Chart.js (она рисует графики) -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-    // --- 1. ГРАФИК ЗАЯВОК ПО ДНЯМ (Линейный) ---
-    fetch('/api/stats/orders/') // Ссылка на API напарника
+    fetch('/api/stats/orders/') 
         .then(response => response.json())
         .then(data => {
-            // Форматируем даты (из 2023-10-01 делаем 01.10)
             const labels = data.map(item => {
                 const date = new Date(item.date);
                 return date.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
@@ -81,30 +71,29 @@
 
             const ctxOrders = document.getElementById('ordersChart').getContext('2d');
             new Chart(ctxOrders, {
-                type: 'line', // Линейный график
+                type: 'line', 
                 data: {
                     labels: labels,
                     datasets: [{
                         label: 'Количество заявок',
                         data: counts,
-                        borderColor: '#0d6efd', // Наш синий цвет
+                        borderColor: '#0d6efd', 
                         backgroundColor: 'rgba(13, 110, 253, 0.1)',
                         borderWidth: 2,
                         fill: true,
-                        tension: 0.3 // Плавные изгибы линий
+                        tension: 0.3 
                     }]
                 },
                 options: {
                     responsive: true,
                     plugins: {
-                        legend: { display: false } // Скрываем легенду, т.к. и так понятно
+                        legend: { display: false } 
                     }
                 }
             });
         });
 
-    // --- 2. ГРАФИК ПОПУЛЯРНЫХ УСЛУГ (Столбчатый) ---
-    fetch('/api/stats/services/') // Ссылка на API напарника
+    fetch('/api/stats/services/') 
         .then(response => response.json())
         .then(data => {
             const labels = data.map(item => item.name);
@@ -112,13 +101,13 @@
 
             const ctxServices = document.getElementById('servicesChart').getContext('2d');
             new Chart(ctxServices, {
-                type: 'bar', // Столбчатый график
+                type: 'bar', 
                 data: {
                     labels: labels,
                     datasets: [{
                         label: 'Количество заказов',
                         data: counts,
-                        backgroundColor: '#0d6efd', // Наш синий цвет
+                        backgroundColor: '#0d6efd', 
                         borderRadius: 5
                     }]
                 },

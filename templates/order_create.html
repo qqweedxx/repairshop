@@ -19,7 +19,6 @@
                     </div>
                 {% endif %}
 
-                <!-- Поле 1: Услуга -->
                 <div class="mb-4">
                     <label for="{{ form.service.id_for_label }}" class="form-label fw-medium mb-2" style="font-size: 15px;">Тип услуги</label>
                     {{ form.service }}
@@ -28,23 +27,19 @@
                     {% endif %}
                 </div>
 
-                <!-- Поле 2: Тип устройства -->
                 <div class="mb-4">
                     <label for="{{ form.device_type.id_for_label }}" class="form-label fw-medium mb-2" style="font-size: 15px;">Тип устройства</label>
                     {{ form.device_type }}
                     
-                    <!-- Показываем серую подсказку, ТОЛЬКО если нет ошибки -->
                     {% if not form.device_type.errors %}
                         <div class="form-text text-muted" style="font-size: 12px;">Обязательное поле</div>
                     {% endif %}
                     
-                    <!-- Показываем красную ошибку, если она есть -->
                     {% if form.device_type.errors %}
                         <div class="text-danger small mt-1">{{ form.device_type.errors }}</div>
                     {% endif %}
                 </div>
 
-                <!-- Поле 3: Описание неисправности -->
                 <div class="mb-4">
                     <label for="{{ form.description.id_for_label }}" class="form-label fw-medium mb-2" style="font-size: 15px;">Описание неисправности</label>
                     {{ form.description }}
@@ -58,14 +53,11 @@
                     {% endif %}
                 </div>
 
-                <!-- Поле 4: Фото -->
                 <div class="mb-4 mt-5">
                     <label class="form-label fw-medium mb-2" style="font-size: 15px;">Фото (по желанию)</label>
-                    <!-- Скрываем стандартный инпут -->
                     <input type="file" name="{{ form.photo.name }}" id="{{ form.photo.id_for_label }}" 
                            class="d-none" accept="image/*" onchange="document.getElementById('file-name').innerText = this.files[0].name">
                     
-                    <!-- Красивая кликабельная рамка -->
                     <label for="{{ form.photo.id_for_label }}" 
                            class="w-100 d-flex flex-column align-items-center justify-content-center p-4 rounded-3" 
                            style="border: 1.5px dashed #6c757d; cursor: pointer; min-height: 160px; transition: 0.2s;"
@@ -85,7 +77,6 @@
                     {% endif %}
                 </div>
 
-                <!-- Кнопка -->
                 <div class="mt-5 mb-4">
                     <button type="submit" class="btn btn-primary w-100 py-2" style="font-size: 16px;">Отправить</button>
                 </div>

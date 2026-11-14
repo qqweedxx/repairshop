@@ -1,6 +1,3 @@
-/* =========================================
-   1. ПОДКЛЮЧЕНИЕ ШРИФТОВ И БАЗОВЫЕ НАСТРОЙКИ
-   ========================================= */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Plus+Jakarta+Sans:wght@700&display=swap');
 
 body {
@@ -9,19 +6,14 @@ body {
 }
 
 :root {
-    --color-primary: #0d6efd; /* Ярко-синий */
-    --color-dark: #0648a7;    /* Тёмно-синий */
+    --color-primary: #0d6efd; 
+    --color-dark: #0648a7;   
 }
 
-/* =========================================
-   2. ЦВЕТА BOOTSTRAP
-   ========================================= */
-/* Тёмно-синий для футера */
 .bg-primary { 
     background-color: var(--color-dark) !important; 
 }
 
-/* Ярко-синий для шапки */
 .bg-light-blue { 
     background-color: var(--color-primary) !important; 
 }
@@ -41,19 +33,15 @@ body {
     color: var(--color-primary) !important; 
 }
 
-/* =========================================
-   3. ШАПКА (HEADER) И ЛОГОТИП
-   ========================================= */
 .navbar {
     position: relative;
-    z-index: 1050 !important; /* Защита от наложения контента */
+    z-index: 1050 !important; 
 }
 
 .navbar-custom {
     height: 130px;
 }
 
-/* Шрифты для логотипа в шапке */
 .brand-title {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 28px;
@@ -70,9 +58,6 @@ body {
     line-height: 1;
 }
 
-/* =========================================
-   4. АДАПТАЦИЯ ШАПКИ (МОБИЛЬНАЯ ВЕРСИЯ)
-   ========================================= */
 @media (max-width: 991.98px) {
     .navbar-custom {
         height: 80px !important; 
@@ -89,7 +74,6 @@ body {
         border: 1px solid rgba(255,255,255,0.3);
     }
 
-    /* Выпадающее меню на телефоне */
     .navbar-collapse {
         background-color: var(--color-dark) !important; 
         padding: 15px;
@@ -104,9 +88,6 @@ body {
     .navbar-nav .nav-link { padding: 12px 0 !important; font-size: 18px; }
 }
 
-/* =========================================
-   5. КОЛЛАЖ "О НАС"
-   ========================================= */
 .collage-wrapper {
     position: relative;
     width: 100%;
@@ -151,7 +132,6 @@ body {
     justify-content: center;
 }
 
-/* Коллаж на мобильных */
 @media (max-width: 767.98px) {
     .collage-wrapper { height: 320px; }
     .collage-box h3 { font-size: 26px; }
