@@ -1,22 +1,31 @@
-/* Подключаем шрифт Inter */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+/* =========================================
+   1. ПОДКЛЮЧЕНИЕ ШРИФТОВ И БАЗОВЫЕ НАСТРОЙКИ
+   ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Plus+Jakarta+Sans:wght@700&display=swap');
 
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #f8f9fa; /* Светло-серый фон как в Bootstrap */
+    background-color: #f8f9fa;
 }
 
 :root {
-    --color-primary: #0d6efd; /* Ярко-синий для кнопок */
-    --color-dark: #0648a7;    /* Тёмно-синий для шапки, футера и блока 10+ */
+    --color-primary: #0d6efd; /* Ярко-синий */
+    --color-dark: #0648a7;    /* Тёмно-синий */
 }
 
-/* ТЁМНО-СИНИЙ ЦВЕТ ДЛЯ ФОНА (Шапка, футер, блок 10+) */
-.bg-primary {
+/* =========================================
+   2. ЦВЕТА BOOTSTRAP
+   ========================================= */
+/* Тёмно-синий для футера */
+.bg-primary { 
     background-color: var(--color-dark) !important; 
 }
 
-/* ЯРКО-СИНИЙ ЦВЕТ ДЛЯ КНОПОК */
+/* Ярко-синий для шапки */
+.bg-light-blue { 
+    background-color: var(--color-primary) !important; 
+}
+
 .btn-primary {
     background-color: var(--color-primary) !important;
     border-color: var(--color-primary) !important;
@@ -28,11 +37,124 @@ body {
     border-color: #0b5ed7 !important;
 }
 
-.text-primary {
-    color: var(--color-primary) !important;
+.text-primary { 
+    color: var(--color-primary) !important; 
 }
 
-/* Высота шапки 130px */
+/* =========================================
+   3. ШАПКА (HEADER) И ЛОГОТИП
+   ========================================= */
+.navbar {
+    position: relative;
+    z-index: 1050 !important; /* Защита от наложения контента */
+}
+
 .navbar-custom {
     height: 130px;
+}
+
+/* Шрифты для логотипа в шапке */
+.brand-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    line-height: 1;
+    margin-bottom: 2px;
+}
+
+.brand-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+/* =========================================
+   4. АДАПТАЦИЯ ШАПКИ (МОБИЛЬНАЯ ВЕРСИЯ)
+   ========================================= */
+@media (max-width: 991.98px) {
+    .navbar-custom {
+        height: 80px !important; 
+        padding: 0 15px;
+    }
+    
+    .navbar-brand img {
+        height: 45px !important; 
+    }
+
+    .navbar-toggler {
+        font-size: 1rem;
+        padding: 5px 10px;
+        border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    /* Выпадающее меню на телефоне */
+    .navbar-collapse {
+        background-color: var(--color-dark) !important; 
+        padding: 15px;
+        border-radius: 12px; 
+        margin-top: 10px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+    }
+    
+    .navbar-nav { text-align: center; }
+    .navbar-nav .nav-item { border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+    .navbar-nav .nav-item:last-child { border-bottom: none; }
+    .navbar-nav .nav-link { padding: 12px 0 !important; font-size: 18px; }
+}
+
+/* =========================================
+   5. КОЛЛАЖ "О НАС"
+   ========================================= */
+.collage-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    height: 400px; 
+    margin: 0 auto;
+}
+
+.collage-img-mech {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 65%;
+    height: 55%;
+    object-fit: cover;
+    z-index: 1;
+    border: 6px solid #fff; 
+}
+
+.collage-img-kitchen {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 55%;
+    height: 75%;
+    object-fit: cover;
+    z-index: 2;
+    border: 6px solid #fff;
+}
+
+.collage-box {
+    position: absolute;
+    bottom: 10%;
+    left: 0;
+    width: 45%;
+    height: 35%;
+    z-index: 3;
+    border: 6px solid #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Коллаж на мобильных */
+@media (max-width: 767.98px) {
+    .collage-wrapper { height: 320px; }
+    .collage-box h3 { font-size: 26px; }
+    .collage-box small { font-size: 12px; }
+    .collage-img-mech, .collage-img-kitchen, .collage-box { border-width: 4px; }
 }

@@ -11,15 +11,20 @@
 </head>
 <body class="d-flex flex-column min-vh-100 bg-light">
 
-<!-- СИНЯЯ ШАПКА -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary navbar-custom py-0">
+<!-- СВЕТЛО-СИНЯЯ ШАПКА -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-light-blue navbar-custom py-0">
     <div class="container">
-        <!-- Твой логотип картинкой -->
-        <a class="navbar-brand" href="/">
-            <img src="{% static 'img/logo.png' %}" alt="СЕВЕР" style="height: 70px; object-fit: contain;">
+        
+        <!-- Логотип с картинкой и правильным текстом -->
+        <a class="navbar-brand d-flex align-items-center text-white text-decoration-none" href="/">
+            <img src="{% static 'img/logo.png' %}" alt="СЕВЕР" style="height: 60px; object-fit: contain;" class="me-3">
+            <div class="d-flex flex-column align-items-start">
+                <span class="brand-title">СЕВЕР</span>
+                <span class="brand-subtitle">ремонтная мастерская</span>
+            </div>
         </a>
         
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         
@@ -29,7 +34,7 @@
                 <li class="nav-item"><a class="nav-link px-3 fw-medium" href="#services">Услуги</a></li>
                 <li class="nav-item"><a class="nav-link px-3 fw-medium" href="#about">О нас</a></li>
                 
-                                {% if user.is_authenticated %}
+                {% if user.is_authenticated %}
                     <!-- Кнопка Выйти -->
                     <li class="nav-item">
                         <form method="post" action="{% url 'logout' %}" class="d-inline">
@@ -37,10 +42,15 @@
                             <button type="submit" class="btn btn-link nav-link px-3">Выйти</button>
                         </form>
                     </li>
-                    
-                    <!-- Иконка профиля (ведет в личный кабинет) -->
+                    <!-- Иконка профиля (умная маршрутизация) -->
                     <li class="nav-item ms-lg-2">
-                        <a class="nav-link d-flex align-items-center gap-2" href="{% url 'client_dashboard' %}" title="Мои заявки">
+                        {% if user.role == 'admin' %}
+                            <a class="nav-link d-flex align-items-center gap-2" href="{% url 'admin_dashboard' %}" title="Панель администратора">
+                        {% elif user.role == 'master' %}
+                            <a class="nav-link d-flex align-items-center gap-2" href="{% url 'master_dashboard' %}" title="Кабинет мастера">
+                        {% else %}
+                            <a class="nav-link d-flex align-items-center gap-2" href="{% url 'client_dashboard' %}" title="Мои заявки">
+                        {% endif %}
                             <span class="d-none d-lg-block" style="font-size: 16px;">{{ user.username }}</span>
                             <i class="bi bi-person-circle fs-3"></i>
                         </a>

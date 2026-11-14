@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Панель управления — Ремонтная мастерская СЕВЕР{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row pt-4">
+        <div class="col-12">
+            
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-3">
+                <div class="d-flex align-items-center gap-3">
+                    <i class="bi bi-person-fill-gear" style="font-size: 3rem; color: #000;"></i>
+                    <h2 class="fw-bold mb-0" style="font-size: 32px;">Личный кабинет</h2>
+                </div>
+                <a href="{% url 'stats_page' %}" class="btn btn-outline-primary px-4 py-2 fw-medium">Посмотреть статистику</a>
+            </div>
+
+            {% if not orders %}
+                <div class="alert alert-info py-4 text-center">
+                    <h5 class="mb-2">Заявок пока нет</h5>
+                    <p class="text-muted mb-0">Как только клиенты начнут оставлять заявки, они появятся здесь.</p>
+                </div>
+            {% else %}
+                <div class="row g-4">
+                    {% for order in orders %}
+                    <div class="col-12 col-md-6">
+                        <div class="card border-0" style="background-color: #6c757d; color: white; border-radius: 4px;">
+                            
+                            <!-- Шапка карточки (чуть темнее) -->
+                            <div class="card-header border-0 d-flex justify-content-between align-items-center py-3" style="background-color: #5c636a;">
+                                <span class="fw-bold" style="font-size: 16px;">Номер заявки</span>
+                                <span style="font-size: 16px;">{{ order.id|stringformat:"08d" }}</span>
+                            </div>
+                            
+                            <!-- Тело карточки -->
+                            <div class="card-body py-4">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-white-50">Тип устройства</span>
+                                    <span class="fw-medium">{{ order.device_type }}</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-white-50">Дата создания</span>
+                                    <span>{{ order.created_at|date:"d.m.Y" }}</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-white-50">Статус</span>
+                                    <span>{{ order.get_status_display }}</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-4">
+                                    <span class="text-white-50">Имя клиента</span>
+                                    <span>{{ order.client.first_name|default:order.client.username }}</span>
+                                </div>
+                                
+                                <!-- Назначение мастера -->
+                                <div class="mt-2">
+                                    <label class="text-white-50 mb-1" style="font-size: 14px;">Мастер</label>
+                                    <!-- Форма для отправки выбранного мастера -->
+                                    <form method="post" action="{% url 'assign_master' order.id %}">
+                                        {% csrf_token %}
+                                        <select name="master_id" class="form-select" onchange="this.form.submit()">
+                                            <option value="">Выберите мастера</option>
+                                            {% for master in masters %}
+                                                <option value="{{ master.id }}" {% if order.master.id == master.id %}selected{% endif %}>
+                                                    {{ master.first_name|default:master.username }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

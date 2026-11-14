@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Кабинет мастера — Ремонтная мастерская СЕВЕР{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row pt-4">
+        <div class="col-12">
+            
+            <!-- Заголовок -->
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <i class="bi bi-person-fill" style="font-size: 3.5rem; color: #000;"></i>
+                <h2 class="fw-bold mb-0" style="font-size: 32px;">Личный кабинет</h2>
+            </div>
+
+            <!-- Фильтр по статусу -->
+            <div class="mb-4" style="max-width: 300px;">
+                <label class="form-label fw-medium mb-1" style="font-size: 14px;">Фильтр</label>
+                <form method="get" action="{% url 'master_dashboard' %}">
+                    <select name="status" class="form-select" onchange="this.form.submit()">
+                        <option value="">Выберите статус</option>
+                        <option value="accepted" {% if request.GET.status == 'accepted' %}selected{% endif %}>Принята</option>
+                        <option value="diagnostics" {% if request.GET.status == 'diagnostics' %}selected{% endif %}>В диагностике</option>
+                        <option value="repair" {% if request.GET.status == 'repair' %}selected{% endif %}>В ремонте</option>
+                        <option value="ready" {% if request.GET.status == 'ready' %}selected{% endif %}>Готова к выдаче</option>
+                        <option value="issued" {% if request.GET.status == 'issued' %}selected{% endif %}>Выдана</option>
+                    </select>
+                </form>
+            </div>
+
+            <!-- Если заявок нет -->
+            {% if not orders %}
+                <div class="alert alert-info py-4 text-center">
+                    <h5 class="mb-2">У вас пока нет назначенных заявок</h5>
+                    <p class="text-muted mb-0">Как только администратор назначит на вас заявку, она появится здесь.</p>
+                </div>
+            {% else %}
+                <!-- Сетка карточек -->
+                <div class="row g-4">
+                    {% for order in orders %}
+                    <div class="col-12 col-md-6 col-lg-6">
+                        
+                        <!-- Карточка заявки (темно-серая) -->
+                        <div class="card border-0 h-100" style="background-color: #6c757d; color: white; border-radius: 6px;">
+                            
+                            <!-- Шапка карточки -->
+                            <div class="card-header border-0 d-flex justify-content-between align-items-center py-3" style="background-color: #5c636a; border-radius: 6px 6px 0 0;">
+                                <span class="fw-bold" style="font-size: 16px;">Номер заявки</span>
+                                <span style="font-size: 16px;">{{ order.id|stringformat:"08d" }}</span>
+                            </div>
+                            
+                            <!-- Тело карточки -->
+                            <div class="card-body py-4 d-flex flex-column">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-white-50">Тип устройства</span>
+                                    <span class="fw-medium">{{ order.device_type }}</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-white-50">Дата создания</span>
+                                    <span>{{ order.created_at|date:"d.m.Y" }}</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-white-50">Статус</span>
+                                    <span class="fw-medium">{{ order.get_status_display }}</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-4">
+                                    <span class="text-white-50">Имя клиента</span>
+                                    <span>{{ order.client.first_name|default:order.client.username }}</span>
+                                </div>
+                                
+                                <!-- Кнопка Редактировать -->
+                                <div class="mt-auto">
+                                    <!-- Ведем на страницу редактирования (если напарник её сделает) -->
+                                    <a href="{% url 'order_update_status' order.id %}" class="btn btn-outline-light w-100 py-2" style="font-size: 14px;">Редактировать</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

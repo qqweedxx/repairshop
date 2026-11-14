@@ -28,44 +28,71 @@
     </div>
 </section>
 
-<!-- 2. НАШИ УСЛУГИ -->
+<!-- 2. НАШИ УСЛУГИ (СТАТИЧНЫЕ) -->
 <section id="services" class="py-5 bg-light">
     <div class="container">
         <h2 class="text-center fw-bold mb-5" style="font-size: 32px;">Наши услуги</h2>
         
-        <div class="row g-4">
-            {% for service in services %}
+        <div class="row g-4 justify-content-center">
+            
+            <!-- Карточка 1: Замена деталей -->
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="card h-100 border-0 shadow-sm">
-                    
-                    <!-- Умная подстановка картинок для карточек -->
-                    {% if forloop.counter == 1 %}
-                        <img src="{% static 'img/card1.png' %}" class="card-img-top" alt="{{ service.name }}" style="height: 220px; object-fit: cover;">
-                    {% elif forloop.counter == 2 %}
-                        <img src="{% static 'img/card2.png' %}" class="card-img-top" alt="{{ service.name }}" style="height: 220px; object-fit: cover;">
-                    {% else %}
-                        <img src="{% static 'img/card3.png' %}" class="card-img-top" alt="{{ service.name }}" style="height: 220px; object-fit: cover;">
-                    {% endif %}
-
+                    <img src="{% static 'img/card1.png' %}" class="card-img-top" alt="Замена деталей" style="height: 220px; object-fit: cover;">
                     <div class="card-body d-flex flex-column pb-4">
-                        <h5 class="card-title fw-bold mb-2">{{ service.name }}</h5>
-                        <p class="card-text text-muted small flex-grow-1">{{ service.description|default:"Описание уточняется." }}</p>
+                        <h5 class="card-title fw-bold mb-2">Замена деталей</h5>
+                        <p class="card-text text-muted small flex-grow-1">Найдём детали и установим новые</p>
                         
                         <div class="d-flex justify-content-between align-items-center mt-3">
-                            <a href="#" class="btn btn-primary btn-sm px-3 py-2" style="font-size: 13px;">Консультация</a>
+                            <!-- Кнопка ведет на создание заявки -->
+                            <a href="{% url 'order_create' %}" class="btn btn-primary btn-sm px-3 py-2" style="font-size: 13px;">Консультация</a>
                             <div class="text-end lh-1">
                                 <small class="text-muted d-block mb-1" style="font-size: 11px;">от</small>
-                                <span class="fw-bold fs-6">{{ service.price|floatformat:0 }}₽</span>
+                                <span class="fw-bold fs-6">5000₽</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            {% empty %}
-            <div class="col-12 text-center">
-                <p class="text-muted">Пока нет услуг в базе данных. Добавьте их в админке.</p>
+
+            <!-- Карточка 2: Очистка от пыли -->
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <img src="{% static 'img/card2.png' %}" class="card-img-top" alt="Очистка от пыли" style="height: 220px; object-fit: cover;">
+                    <div class="card-body d-flex flex-column pb-4">
+                        <h5 class="card-title fw-bold mb-2">Очистка от пыли</h5>
+                        <p class="card-text text-muted small flex-grow-1">Клининг ваших девайсов</p>
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <a href="{% url 'order_create' %}" class="btn btn-primary btn-sm px-3 py-2" style="font-size: 13px;">Консультация</a>
+                            <div class="text-end lh-1">
+                                <small class="text-muted d-block mb-1" style="font-size: 11px;">от</small>
+                                <span class="fw-bold fs-6">1500₽</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            {% endfor %}
+
+            <!-- Карточка 3: Ремонт -->
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <img src="{% static 'img/card3.png' %}" class="card-img-top" alt="Ремонт" style="height: 220px; object-fit: cover;">
+                    <div class="card-body d-flex flex-column pb-4">
+                        <h5 class="card-title fw-bold mb-2">Ремонт</h5>
+                        <p class="card-text text-muted small flex-grow-1">Исправим неполадки</p>
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <a href="{% url 'order_create' %}" class="btn btn-primary btn-sm px-3 py-2" style="font-size: 13px;">Консультация</a>
+                            <div class="text-end lh-1">
+                                <small class="text-muted d-block mb-1" style="font-size: 11px;">от</small>
+                                <span class="fw-bold fs-6">4000₽</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
@@ -83,42 +110,19 @@
                 </p>
             </div>
             
-            <!-- Коллаж справа (ПК) -->
-            <div class="col-lg-6 mt-5 mt-lg-0 d-none d-lg-block">
-                <div class="position-relative mx-auto" style="max-width: 480px; height: 400px;">
-                    
+            <!-- Коллаж справа (универсальный) -->
+            <div class="col-lg-6 mt-5 mt-lg-0">
+                <div class="collage-wrapper">
                     <!-- Левая верхняя (Мастер) -->
-                    <img src="{% static 'img/about1.png' %}" class="img-fluid position-absolute" 
-                         style="top: 0; left: 0; width: 65%; height: 220px; object-fit: cover; z-index: 1; border: 6px solid white;">
+                    <img src="{% static 'img/about1.png' %}" class="collage-img-mech" alt="Мастер">
                     
                     <!-- Правая (Кухня) -->
-                    <img src="{% static 'img/about2.png' %}" class="img-fluid position-absolute" 
-                         style="bottom: 0; right: 0; width: 55%; height: 280px; object-fit: cover; z-index: 2; border: 6px solid white;">
+                    <img src="{% static 'img/about2.png' %}" class="collage-img-kitchen" alt="Кухня">
                     
                     <!-- Левая нижняя (Синий блок) -->
-                    <div class="bg-primary text-white text-center position-absolute d-flex flex-column justify-content-center" 
-                         style="bottom: 20px; left: 0; width: 45%; height: 150px; z-index: 3; border: 6px solid white;">
+                    <div class="collage-box bg-primary">
                         <h3 class="fw-bold mb-0 text-white">10+</h3>
-                        <small class="text-white" style="font-size: 14px;">лет опыта</small>
-                    </div>
-                    
-                </div>
-            </div>
-
-            <!-- Версия для мобильных (без закруглений) -->
-            <div class="col-lg-6 mt-4 d-block d-lg-none">
-                <div class="row g-3">
-                    <div class="col-12">
-                        <img src="{% static 'img/about1.png' %}" class="img-fluid w-100" style="height: 250px; object-fit: cover;" alt="Мастер">
-                    </div>
-                    <div class="col-5">
-                        <div class="bg-primary text-white text-center d-flex flex-column justify-content-center h-100 p-3">
-                            <h4 class="fw-bold mb-0">10+</h4>
-                            <small style="font-size: 12px;">лет опыта</small>
-                        </div>
-                    </div>
-                    <div class="col-7">
-                        <img src="{% static 'img/about2.png' %}" class="img-fluid w-100 h-100" style="object-fit: cover;" alt="Кухня">
+                        <small class="text-white">лет опыта</small>
                     </div>
                 </div>
             </div>

@@ -8,9 +8,14 @@ from .decorators import role_required
 @role_required('master', 'admin')
 def master_dashboard(request):
     if request.user.role == 'admin':
-        orders = Order.objects.all()
+        orders = Order.objects.all().order_by('-created_at')
     else:
-        orders = Order.objects.filter(master=request.user)
+        orders = Order.objects.filter(master=request.user).order_by('-created_at')
+        
+    status_filter = request.GET.get('status')
+    if status_filter:
+        orders = orders.filter(status=status_filter)
+        
     return render(request, 'master_dashboard.html', {'orders': orders})
 
 

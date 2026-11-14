@@ -22,4 +22,6 @@ urlpatterns = [
     path('api/stats/masters/', views_admin.stats_masters_load, name='api_stats_masters'),
     path('master/order/<int:order_id>/part/', views_master.order_add_part, name='order_add_part'),
     path('master/order/<int:order_id>/cost/', views_master.order_update_cost, name='order_update_cost'),
+    path('admin-panel/', views_admin.admin_dashboard, name='admin_dashboard'),
+    path('admin-panel/assign/<int:order_id>/', views_admin.assign_master, name='assign_master'),
 ]
