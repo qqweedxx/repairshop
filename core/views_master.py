@@ -28,9 +28,10 @@ def order_update_status(request, order_id):
         return redirect('master_dashboard')
 
     if request.method == 'POST':
+        old_status = order.status  # <--- ЗАПОМИНАЕМ СТАРЫЙ СТАТУС ЗДЕСЬ!
         form = StatusChangeForm(request.POST, instance=order)
+        
         if form.is_valid():
-            old_status = order.status
             updated_order = form.save()
 
             if old_status != updated_order.status:
@@ -48,7 +49,6 @@ def order_update_status(request, order_id):
         'form': form,
         'order': order,
     })
-
 
 @role_required('master', 'admin')
 def order_add_comment(request, order_id):
