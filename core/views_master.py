@@ -34,10 +34,13 @@ def order_update_status(request, order_id):
         if form.is_valid():
             updated_order = form.save(commit=False)
             
-            total_cost = request.POST.get('total_cost')
+            total_cost = request.POST.get('total_cost', '').replace(',', '.')
             if total_cost:
-                updated_order.total_cost = total_cost
-                
+                try:
+                    updated_order.total_cost = float(total_cost)
+                except ValueError:
+                    pass 
+
             updated_order.save()
 
             if old_status != updated_order.status:
