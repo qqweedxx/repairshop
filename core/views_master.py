@@ -32,18 +32,14 @@ def order_update_status(request, order_id):
         form = StatusChangeForm(request.POST, instance=order)
         
         if form.is_valid():
-            # Сохраняем статус, но пока не применяем к базе
             updated_order = form.save(commit=False)
             
-            # 1. Сохраняем стоимость
             total_cost = request.POST.get('total_cost')
             if total_cost:
                 updated_order.total_cost = total_cost
                 
-            # Применяем изменения в базу
             updated_order.save()
 
-            # 2. Записываем историю статуса (если он изменился)
             if old_status != updated_order.status:
                 OrderStatusHistory.objects.create(
                     order=updated_order,
@@ -52,7 +48,6 @@ def order_update_status(request, order_id):
                 )
                 messages.success(request, f'Статус изменён на «{updated_order.get_status_display()}».')
 
-            # 3. Сохраняем комментарий (если он введен)
             comment_text = request.POST.get('comment', '').strip()
             if comment_text:
                 Comment.objects.create(
@@ -107,12 +102,11 @@ def order_add_part(request, order_id):
             order_part = form.save(commit=False)
             order_part.order = order
             
-            # Сначала проверяем, хватает ли деталей на складе
             part = order_part.part
             if part.quantity_in_stock >= order_part.quantity_used:
                 part.quantity_in_stock -= order_part.quantity_used
                 part.save()
-                order_part.save() # Сохраняем только если на складе хватило
+                order_part.save() 
                 messages.success(request, f'Запчасть «{part.name}» добавлена, остаток на складе: {part.quantity_in_stock}.')
             else:
                 messages.error(request, f'Ошибка! На складе только {part.quantity_in_stock} шт. запчасти «{part.name}».')
